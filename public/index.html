@@ -33,15 +33,22 @@
     <script src="https://accounts.google.com/gsi/client" async></script>
 
     <script>
-        function handleCredentialResponse(response) {
+        async function handleCredentialResponse(response)  {
             
 
-            // Google token : ID_TOKEN
-            //console.log('Id token: ', response.credential)
+             // Obtener la URL completa del navegador
+            const baseUrl = window.location.href;
+
+            console.log(baseUrl)
+
+             // Concatenar la ruta de la API
+            const apiUrl = `${baseUrl}api/auth/google`;
+
+            console.log(apiUrl)
 
             const body = { id_token: response.credential}
 
-            fetch('http://localhost:3000/api/auth/google', {
+            const validar = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json'
@@ -53,7 +60,7 @@
                                                             console.log(resp)
                                                             localStorage.setItem('email', resp.usuario.correo)
                                                         })
-                                                        .catch(console.warn)
+                                                        .catch(error => console.error(error))
         }
 
         const button = document.getElementById('google_signout')
