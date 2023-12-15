@@ -58,6 +58,8 @@ const usuariosPost = async (req, res = response) => {
     const salt = bcryptjs.genSaltSync()
     usuario.password = bcryptjs.hashSync(password, salt)
     
+    usuario.img = ''
+
     //Guardar en BD
     await usuario.save()
     
