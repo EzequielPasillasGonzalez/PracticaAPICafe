@@ -1,4 +1,4 @@
-const Role = require('../models/role.models')
+const { Category, Producto, Role } = require('../models/index.models')
 
 const Usuario = require('../models/usuario.models')
 
@@ -11,7 +11,10 @@ const esRoleValido = async (role = '') => {
 }
 
 const emailExiste = async (correo = '') => {    
-    const existsEmail = await Usuario.findOne({correo})
+
+    const regex = new RegExp( correo, 'i') 
+
+    const existsEmail = await Usuario.findOne({correo: regex})
 
     if(existsEmail) {        
         throw new Error(`El correo ${correo} ya existe en la base de datos`)
@@ -36,7 +39,9 @@ const nombreRolValido = async (role = '') => {
 }
 
 const existeRol = async (role = '') =>{
-    const existsRol = await Role.findOne({role})    
+    const regex = new RegExp( role, 'i') 
+    
+    const existsRol = await Role.findOne({role: regex})    
 
     if(existsRol){
         throw new Error(`El rol ${role} ya existe en la base de datos`)
@@ -52,8 +57,102 @@ const existeIDRole = async (id = '') => {
     }
 }
 
-// const stateValido = async (state) => {
-//     const ex
+const existeIDCategory = async ( id='') =>{
+    const existeCategory = await Category.findById(id)
+
+    if(!existeCategory) {
+        console.log('Error');
+        throw new Error(`el id ${id} no existe en la base de datos`)
+    }
+}
+
+
+const nombreCategoryExiste = async (nombre = '') => {    
+
+    const regex = new RegExp( nombre, 'i') 
+
+    const existsnombre = await Category.findOne({nombre: regex})
+
+    if(existsnombre) {        
+        throw new Error(`La categoria ${nombre} ya existe en la base de datos`)
+    }
+}
+
+const nombreProductExiste = async (nombre = '') => {    
+    
+    const regex = new RegExp( nombre, 'i') 
+
+    const existsnombre = await Producto.findOne({nombre: regex})
+
+    if(existsnombre) {        
+        throw new Error(`El producto ${nombre} ya existe en la base de datos`)
+    }
+}
+
+const nombreCategoryExisteProduct = async (nombre = '') => {    
+    const existsnombre = await Category.findOne({nombre})
+
+    if(!existsnombre) {        
+        throw new Error(`La categoria ${nombre} no existe en la base de datos`)
+    }
+}
+
+const existeIDProduct = async ( id='') =>{
+    const existeCategory = await Producto.findById(id)    
+
+    if(!existeCategory) {
+        console.log('Error');
+        throw new Error(`El id ${id} no existe en la base de datos`)
+    }
+}
+
+const buscarCorreoUserModify = async (correo = '') => {
+    const existsEmail = await Usuario.findOne({correo})
+
+        if(!existsEmail) {        
+            throw new Error(`El correo ${correo} no existe en la base de datos`)
+        }
+
+        return existsEmail
+}
+
+const buscarCategoriaModificarProducto = async (category = '') => {
+    const categoria = await Category.findOne({nombre:category})
+
+        if(!categoria){
+            throw new Error(`La categoria ${category} no existe en la base de datos`)
+        }
+        
+
+    if(categoria.state === false){
+        throw new Error(`La categoria ${categoria.nombre} esta dada de baja en la base de datos`)
+    }
+
+    return categoria
+}
+
+
+const buscarCategoria = async (category = '') => {
+    const categoria = await Category.find({nombre:category})
+
+        if(!categoria){
+            throw new Error(`La categoria ${category} no existe en la base de datos`)
+        }
+        
+
+    if(categoria.state === false){
+        throw new Error(`La categoria ${categoria.nombre} esta dada de baja en la base de datos`)
+    }            
+    return categoria
+}
+
+// const extraerNombresCategoria = async () => {
+//     const categorias = await Category.find({}, 'nombre'); // Solo se recuperan los nombres
+
+//     // Utilizar el método map para crear un nuevo array con solo los nombres
+//     const nombresCategorias = categorias.map(categoria => categoria.nombre);
+
+//     return nombresCategorias
 // }
 
 module.exports = {
@@ -62,5 +161,14 @@ module.exports = {
     existeID,
     nombreRolValido,
     existeRol,
-    existeIDRole
+    existeIDRole,
+    existeIDCategory,
+    nombreCategoryExiste,
+    nombreProductExiste,
+    nombreCategoryExisteProduct,
+    existeIDProduct,
+    buscarCorreoUserModify,
+    buscarCategoriaModificarProducto,
+    buscarCategoria,
+   // extraerNombresCategoria
 }

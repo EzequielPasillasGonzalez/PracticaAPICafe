@@ -8,10 +8,12 @@ class Server {
         this.port = process.env.PORT
 
         this.paths = {
-            auth     : '/api/auth', // Path para autentificacion
-            user     : '/api/user',
-            role     : '/api/role',
-            category : '/api/category'
+                auth     : '/api/auth', // Path para autentificacion
+                buscar   : '/api/search',
+                category : '/api/category',
+                products : '/api/products',
+                role     : '/api/role',
+                user     : '/api/user',
         }
 
         // Conectar a la base de datos
@@ -43,13 +45,16 @@ class Server {
     routes() {
 
         this.app.use(this.paths.auth, require('../routes/auth.routes'))
+        this.app.use(this.paths.buscar, require('../routes/search.routes'))
         this.app.use(this.paths.user, require('../routes/user.routes'))
         this.app.use(this.paths.role, require('../routes/role.routes'))
         this.app.use(this.paths.category, require('../routes/category.routes'))
+        this.app.use(this.paths.products, require('../routes/products.routes'))
+        
     }
 
     listen() {
-        this.app.listen(this.port, () => console.log(`Example app listening on port http://localhost:${this.port}!`))
+        this.app.listen(this.port, () => console.log(`Example app listening on port ${this.port}`))
     }
 }
 

@@ -69,7 +69,7 @@ const roleDelete = async (req, res = response) => {
     const { id } = req.params
     
     // Desactivar
-    const role = await Role.findByIdAndUpdate(id, {state: false} )
+    const role = await Role.findByIdAndUpdate(id, {state: false},)
 
     res.json({
         ok: true,

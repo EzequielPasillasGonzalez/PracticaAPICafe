@@ -1,17 +1,29 @@
 const { Schema, model } = require('mongoose');
 
 const CategorySchema = Schema({
-    npmbre: {
+    nombre: {
         type: String,
-        required: [true, 'El nombre es obligatorio']
+        required: [true, 'El nombre es obligatorio'],
+        unique: true
     },
     state: {
         type: Boolean,
         default: true
     },
-    user: {
+    userCreate: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    userModify: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    createDate: {
+        type: Date,
+        required: [true, 'La fecah de creación es obligatoria'],
+    },
+    modifyDate: {
+        type: Date,
     }
 })
 
@@ -21,4 +33,4 @@ CategorySchema.methods.toJSON = function () {
     return category
 }
 
-module.exports = model('Category', CategorySchema) // Category, verifica si la coleccion existe en mongodb y si no la crea
+module.exports = model('Categorie', CategorySchema) // Category, verifica si la coleccion existe en mongodb y si no la crea

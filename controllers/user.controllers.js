@@ -11,7 +11,7 @@ const usuariosGet = async (req, res = response) => {
     let { limit, from} = req.query
 
     // Verificar y asignar valores predeterminados si son cadenas vacías o no están definidos
-    limit = limit === '' || limit === undefined ? 2 : Number(limit);
+    limit = limit === '' || limit === undefined ? 5 : Number(limit);
     from = from === '' || from === undefined ? 0 : Number(from);
 
     const [total, user] = await Promise.all([
@@ -38,8 +38,7 @@ const usuariosPut = async (req, res = response) => {
         const salt = bcryptjs.genSaltSync()
         resto.password = bcryptjs.hashSync(password, salt)
     }
-
-    console.log(resto);
+    
     //Todo: validar con la base de datos
     const usuario = await Usuario.findByIdAndUpdate(id, resto)
 
