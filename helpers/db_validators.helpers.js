@@ -28,6 +28,12 @@ const existeID = async (id = '') => {
         console.log('error');
         throw new Error(`El id ${id} no existe en la base de datos`)
     }
+    
+    if(existeUsuario.state === false){
+        throw new Error(`El usuario ${existeUsuario.nombre} esta dado de baja en la base de datos`)
+    }
+
+    return true
 }
 
 const nombreRolValido = async (role = '') => {
@@ -146,14 +152,16 @@ const buscarCategoria = async (category = '') => {
     return categoria
 }
 
-// const extraerNombresCategoria = async () => {
-//     const categorias = await Category.find({}, 'nombre'); // Solo se recuperan los nombres
+const coleccionesPermitidas = async ( coleccion = '', colecciones = [] ) => {
 
-//     // Utilizar el método map para crear un nuevo array con solo los nombres
-//     const nombresCategorias = categorias.map(categoria => categoria.nombre);
+    const incluida = colecciones.includes(coleccion)
 
-//     return nombresCategorias
-// }
+    if( !incluida ){
+        throw new Error(`La coleccion ${coleccion} no es permitida, las permitidas son ${colecciones}`)
+    }
+
+    return true
+}
 
 module.exports = {
     esRoleValido,
@@ -170,5 +178,5 @@ module.exports = {
     buscarCorreoUserModify,
     buscarCategoriaModificarProducto,
     buscarCategoria,
-   // extraerNombresCategoria
+    coleccionesPermitidas
 }

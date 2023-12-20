@@ -40,6 +40,9 @@ const ProductSchema = Schema({
     },
     modifyDate: {
         type: Date,
+    },
+    img: {
+        type: String,
     }
 })
 
