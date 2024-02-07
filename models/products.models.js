@@ -43,6 +43,9 @@ const ProductSchema = Schema({
     },
     img: {
         type: String,
+    },
+    cantidad: {
+        type: Number
     }
 })
 
