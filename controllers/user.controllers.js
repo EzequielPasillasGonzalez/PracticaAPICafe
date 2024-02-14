@@ -45,7 +45,7 @@ const usuariosPut = async (req, res = response) => {
     if(order){
         const user = await Usuario.findById(id);
         // Actualizar la propiedad "order" con los nuevos valores
-        user.order.push(...order);
+        user.order.push(order);
 
         // Guardar el usuario actualizado en la base de datos
         await user.save();
