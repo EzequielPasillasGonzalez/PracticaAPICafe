@@ -29,6 +29,10 @@ const UsuarioSchema = Schema ({
     google: {
         type: Boolean,
         default: false
+    },
+    order: {
+        type: [String], // Tipo de elementos en la lista
+        default: [], // Valor por defecto: una lista vacía
     }
 
 })
