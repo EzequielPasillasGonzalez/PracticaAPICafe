@@ -31,16 +31,27 @@ const usuariosGet = async (req, res = response) => {
 const usuariosPut = async (req, res = response) => {
 
     const {id} = req.params
-    const { _id, password, google, ...resto } = req.body
+    const { _id, password, google, order, ...resto } = req.body
 
     
     if(password){
         const salt = bcryptjs.genSaltSync()
         resto.password = bcryptjs.hashSync(password, salt)
-    }
+    }    
     
     //Todo: validar con la base de datos
     const usuario = await Usuario.findByIdAndUpdate(id, resto)
+
+    if(order){
+        const user = await Usuario.findById(id);
+        // Actualizar la propiedad "order" con los nuevos valores
+        user.order.push(...order);
+
+        // Guardar el usuario actualizado en la base de datos
+        await user.save();
+    }
+
+
 
     res.json({
         ok: true,        
