@@ -44,13 +44,13 @@ class Server {
 
     middlewares(){
         // CORS
-        // this.app.use(cors({
-        //     origin: '*', // Puedes ajustar esto según tus necesidades
-        //     methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT'],
-        //     credentials: true,
-        // }));
+        this.app.use(cors({
+            origin: '*', // Puedes ajustar esto según tus necesidades
+            methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT'],
+            credentials: true,
+        }));
 
-        this.app.use(cors());
+        //this.app.use(cors());
 
         // Lectura y parseo del body
         this.app.use(express.json())
