@@ -148,11 +148,12 @@ const updateProductList = async ( req, res = response) => {
         for (const product of order) {
             let {id, cantidad, ...resto} = product
 
-            let nuevaCantidad = cantidad - 1
+            let nuevaCantidad = cantidad - 1;
 
-            resto.cantidad = nuevaCantidad
+            // Actualizar la cantidad en el objeto product
+            product.cantidad = nuevaCantidad;
 
-            newProduct = await Producto.findByIdAndUpdate(id, resto, {new : true})            
+            newProduct = await Producto.findByIdAndUpdate(id, product, {new : true}) 
 
         }
 
@@ -168,8 +169,6 @@ const updateProductList = async ( req, res = response) => {
             body: `Error al acceder a la base de datos ${error}`
         })
     }
-    
-   
 
 
 }
