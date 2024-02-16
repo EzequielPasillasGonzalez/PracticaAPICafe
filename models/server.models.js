@@ -18,6 +18,7 @@ class Server {
                 role     : '/api/role',
                 uploads  : '/api/uploads',
                 user     : '/api/user',
+                email     : '/api/email',
         }
 
         this.server = require('http').createServer(this.app)
@@ -67,6 +68,7 @@ class Server {
         this.app.use(this.paths.role, require('../routes/role.routes'))
         this.app.use(this.paths.uploads, require('../routes/uploads.routes'))
         this.app.use(this.paths.user, require('../routes/user.routes'))
+        this.app.use(this.paths.email, require('../routes/sendEmail.routes'))
     }
 
     sockets() {
