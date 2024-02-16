@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { check } = require('express-validator')
 
 const { validarJWT, validarCampos, esAdminRole } = require('../middlewares/index.middlewares')
-const { createProduct, getProducts, getProductById, updateProduct, deleteProduct } = require('../controllers/products.controllers')
+const { createProduct, getProducts, getProductById, updateProduct, deleteProduct, updateProductList } = require('../controllers/products.controllers')
 const { nombreProductExiste, nombreCategoryExisteProduct, existeIDProduct } = require('../helpers/db_validators.helpers')
 
 
@@ -43,6 +43,14 @@ router.put('/:id', [
     check('id').custom(existeIDProduct),
     validarCampos
 ], updateProduct)
+
+router.patch('/list/', [
+    validarJWT,
+    // check('id', 'Debe de contener un ID para hacer la modifcacion').notEmpty(),
+    // check('id', 'El ID no es valido').isMongoId(),
+    // check('id').custom(existeIDProduct),
+    //validarCampos
+], updateProductList)
 
 // Borrar un products - Admin - cualquier persona con un token valido
 router.delete('/:id', [

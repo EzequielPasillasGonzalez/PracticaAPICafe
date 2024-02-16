@@ -136,6 +136,44 @@ const updateProduct = async ( req, res = response) => {
     }
 }
 
+const updateProductList = async ( req, res = response) => {
+    
+    try {
+        
+        const {order} = req.body
+
+        let newProduct
+
+
+        for (const product of order) {
+            let {id, cantidad, ...resto} = product
+
+            let nuevaCantidad = cantidad - 1
+
+            resto.cantidad = nuevaCantidad
+
+            newProduct = await Producto.findByIdAndUpdate(id, resto, {new : true})            
+
+        }
+
+        res.json({
+            ok: true,
+            body: newProduct
+        })
+    
+
+    } catch (error) {
+        res.json({
+            ok: false,
+            body: `Error al acceder a la base de datos ${error}`
+        })
+    }
+    
+   
+
+
+}
+
 const deleteProduct = async ( req, res = response) => {
     try {
 
@@ -176,5 +214,6 @@ module.exports = {
     getProducts,
     getProductById,
     updateProduct,
+    updateProductList,
     deleteProduct
 }

@@ -36,7 +36,7 @@ const ProductSchema = Schema({
     },
     createDate: {
         type: Date,
-        required: [true, 'La fecah de creación es obligatoria'],
+        required: [true, 'La fecha de creación es obligatoria'],
     },
     modifyDate: {
         type: Date,
