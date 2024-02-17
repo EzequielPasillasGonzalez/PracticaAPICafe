@@ -46,7 +46,7 @@ class Server {
         // CORS
         this.app.use(cors({
             origin: '*', // Puedes ajustar esto según tus necesidades
-            methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT'],
+            methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
             credentials: true,
         }));
 

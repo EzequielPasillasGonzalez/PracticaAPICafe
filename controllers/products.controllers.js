@@ -159,7 +159,7 @@ const updateProductList = async ( req, res = response) => {
 
         res.json({
             ok: true,
-            body: newProduct
+            body: 'Compra realizada'
         })
     
 
