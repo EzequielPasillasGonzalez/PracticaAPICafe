@@ -45,16 +45,16 @@ const getProducts = async (req, res = response) =>{
 
         const query = {state: true}
 
-        let { limit, from} = req.query
+        // let { limit, from} = req.query
     
-        limit = limit === '' || limit === undefined ? 5 : Number(limit);
-        from = from === '' || from === undefined ? 0 : Number(from);        
+        // limit = limit === '' || limit === undefined ? 5 : Number(limit);
+        // from = from === '' || from === undefined ? 0 : Number(from);        
     
         const [total, product] = await Promise.all([
             Producto.countDocuments(query),
             Producto.find(query)
-                                .limit(Number(limit))
-                                .skip(Number(from))
+                                // .limit(Number(limit))
+                                // .skip(Number(from))
                                 .populate('category', 'nombre')
                                 .populate('userCreate', 'nombre')
                                 .populate('userModify', 'nombre')
@@ -174,10 +174,10 @@ const updateProductList = async ( req, res = response) => {
 }
 
 const deleteProduct = async ( req, res = response) => {
-    try {
+    try {        
 
-        const {correo} = req.usuario
-        const usuario =  await buscarCorreoUserModify(correo)
+        // const {correo} = req.usuario
+        // const usuario =  await buscarCorreoUserModify(correo)
 
         const { id } = req.params
 
@@ -185,13 +185,13 @@ const deleteProduct = async ( req, res = response) => {
 
         const modifyDate = new Date()
 
-        datos.userModify = usuario
-        datos.modifyDate = modifyDate
+        // datos.userModify = usuario
+        // datos.modifyDate = modifyDate
 
         const product = await Producto.findByIdAndUpdate(id, datos, {new : true})
                                                         .populate('category', 'nombre') 
-                                                        .populate('userCreate', 'nombre') 
-                                                        .populate('userModify', 'nombre')
+                                                        // .populate('userCreate', 'nombre') 
+                                                        // .populate('userModify', 'nombre')
 
 
 

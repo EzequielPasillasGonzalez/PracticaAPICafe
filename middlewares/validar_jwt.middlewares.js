@@ -6,6 +6,8 @@ const Usuario = require('../models/usuario.models');
 const validarJWT = async (req = request, res = response, next) =>{
     const token = req.header('awt_token') // Como se esepecifica aqui, es como el front-end lo tiene que enviar
 
+    
+
     if(!token) {
         return res.status(401).json({
             ok: false,

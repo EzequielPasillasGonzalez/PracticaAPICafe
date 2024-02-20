@@ -54,8 +54,8 @@ router.patch('/list/', [
 
 // Borrar un products - Admin - cualquier persona con un token valido
 router.delete('/:id', [
-    validarJWT,
-    esAdminRole,
+    //validarJWT,
+    //esAdminRole,
     check('id', 'Debe de contener un ID para eliminar el producto').notEmpty(),
     check('id', 'El ID no es valido').isMongoId(),
     check('id').custom(existeIDProduct),
