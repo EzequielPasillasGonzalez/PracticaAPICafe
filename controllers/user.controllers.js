@@ -53,7 +53,7 @@ const usuariosPut = async (req, res = response) => {
     }    
     
     //Todo: validar con la base de datos
-    const usuario = await Usuario.findByIdAndUpdate(id, resto)
+    const usuario = await Usuario.findByIdAndUpdate(id, resto, {new : true})
 
     if(order){
         const user = await Usuario.findById(id);
