@@ -31,12 +31,25 @@ const usuariosGet = async (req, res = response) => {
 const usuariosPut = async (req, res = response) => {
 
     const {id} = req.params
-    const { _id, password, google, order, ...resto } = req.body
+    const { _id, passwordNew, google, order, passwordOld, ...resto } = req.body
 
     
-    if(password){
+    if(passwordOld && passwordNew){
+
+        const user = await Usuario.findById(id);
+
+        // Verficar la contraseña
+        const password_validate = bcryptjs.compareSync(passwordOld, user.password)
+        
+        if(!password_validate){
+            return res.status(400).json({
+                ok: false,
+                body: "El password no es correcto"
+            })
+        }
+
         const salt = bcryptjs.genSaltSync()
-        resto.password = bcryptjs.hashSync(password, salt)
+        resto.password = bcryptjs.hashSync(passwordNew, salt)        
     }    
     
     //Todo: validar con la base de datos
