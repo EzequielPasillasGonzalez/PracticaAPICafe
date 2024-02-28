@@ -19,6 +19,7 @@ class Server {
                 uploads  : '/api/uploads',
                 user     : '/api/user',
                 email     : '/api/email',
+                paypal     : '/api/paypal',
         }
 
         this.server = require('http').createServer(this.app)
@@ -75,6 +76,7 @@ class Server {
         this.app.use(this.paths.uploads, require('../routes/uploads.routes'))
         this.app.use(this.paths.user, require('../routes/user.routes'))
         this.app.use(this.paths.email, require('../routes/sendEmail.routes'))
+        this.app.use(this.paths.paypal, require('../routes/paypal.routes'))
     }
 
     sockets() {
