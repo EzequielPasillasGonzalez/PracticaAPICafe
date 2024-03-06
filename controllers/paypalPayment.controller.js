@@ -127,9 +127,23 @@ const captureOrder = async ( req, res = response) => {
 }
 
 
-const notifyOrder = ( req, res) => {
-    console.log(req.body);
-    res.send(req.body)
+const notifyOrder = async ( req, res) => {
+
+    try {
+        // Hacer una solicitud HTTP al frontend
+        await axios.post('http://localhost:8081/?#/products', notificationData);
+        
+        return res.json({
+            ok: true,
+            body: req.body
+        })
+    } catch(error) {
+        return res.status(400).json({
+            ok: false,
+            body: `No fue posible buscar el pedido ${error}`
+        })
+    }
+    
 }
 
 module.exports = {
