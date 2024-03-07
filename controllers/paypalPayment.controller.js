@@ -47,9 +47,7 @@ const createOrder = async (req, res = response) => {
                 Authorization: `Bearer ${access_token}`
             }
         })            
-    
-
-        console.log(access_token);
+            
 
         return res.json({
             ok: true,
@@ -67,7 +65,7 @@ const createOrder = async (req, res = response) => {
 const getOrder = async ( req, res = response) => {
 
     try {
-        const {id} = req.params
+        const {id} = req.params        
 
         const access_token = await createToken()        
 
@@ -75,11 +73,8 @@ const getOrder = async ( req, res = response) => {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
-        })
-
-        console.log(access_token);
-
-        console.log(resp);
+        })        
+        
 
         return res.json({
             ok: true,
@@ -101,16 +96,14 @@ const captureOrder = async ( req, res = response) => {
         const {id} = req.params
 
         const access_token = await createToken()       
-        
-        console.log(access_token);
+                
 
         const resp = await axios.post(`${process.env.PAYPAL_URL}/v2/checkout/orders/${id}/capture`, {},{
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
         })
-
-        console.log(resp.data);
+        
 
         return res.json({
             ok: true,
