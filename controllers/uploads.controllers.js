@@ -199,8 +199,11 @@ const actualizarImagenCloudinary = async (req, res = response) => {
 
         const { tempFilePath } = req.files.archivo        
 
-        const { secure_url } = await cloudinary.uploader.upload( tempFilePath )
+        const response = await cloudinary.uploader.upload( tempFilePath )
         
+        console.log(response);
+        
+        const { secure_url } = response
         console.log(secure_url);
 
         modelo.img = secure_url
