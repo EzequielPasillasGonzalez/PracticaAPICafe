@@ -163,6 +163,8 @@ const actualizarImagenCloudinary = async (req, res = response) => {
                     
                     modelo = await Producto.findById(id)
 
+                    console.log(modelo.nombre);
+
                     if(!modelo){
                         return res.status(400).json({
                             ok: false,
@@ -197,14 +199,18 @@ const actualizarImagenCloudinary = async (req, res = response) => {
             await cloudinary.uploader.destroy(public_id)
         }
 
-        const { tempFilePath } = req.files.archivo        
+        const { tempFilePath } = req.files.archivo   
+        
+        if(!tempFilePath){
+            res.status(400).json({
+                ok: false,
+                body: 'No hay tempfile'
+            })
+        }        
 
         const response = await cloudinary.uploader.upload( tempFilePath )
-        
-        console.log(response);
-        
-        const { secure_url } = response
-        console.log(secure_url);
+
+        const { secure_url } = response        
 
         modelo.img = secure_url
 
