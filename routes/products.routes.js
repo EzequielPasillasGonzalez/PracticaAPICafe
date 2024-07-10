@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { check } = require('express-validator')
 
 const { validarJWT, validarCampos, esAdminRole } = require('../middlewares/index.middlewares')
-const { createProduct, getProducts, getProductById, updateProduct, deleteProduct, updateProductList } = require('../controllers/products.controllers')
+const { createProduct, getProducts, getProductById, updateProduct, deleteProduct, updateProductList, generatePDF } = require('../controllers/products.controllers')
 const { nombreProductExiste, nombreCategoryExisteProduct, existeIDProduct } = require('../helpers/db_validators.helpers')
 
 
@@ -16,6 +16,14 @@ const router = Router()
 // Obtener todas las products - publico
 router.get('/', getProducts)
 
+
+router.get('/generatePDF', [
+    // validarJWT,
+    // check('nombre', 'Es necesario un nombre para poder crear la cateogria').notEmpty(),
+    // check('nombre').custom(nombreCategoryExiste),
+    // validarCampos
+],  generatePDF)
+
 // Obtener una products por id - publico
 router.get('/:id', [
     check('id', 'Debe de contener un ID para hacer la busqueda especializada').notEmpty(),
@@ -23,6 +31,8 @@ router.get('/:id', [
     check('id').custom(existeIDProduct),    
     validarCampos
 ], getProductById)
+
+
 
 
 // Crear una products - privado - cualquier persona con un token valido
@@ -34,6 +44,8 @@ router.post('/', [
     check('category').custom(nombreCategoryExisteProduct),
     validarCampos
 ], createProduct)
+
+
 
 // Actualizar una products - privado - cualquier persona con un token valido
 router.put('/:id', [

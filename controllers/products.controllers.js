@@ -1,15 +1,17 @@
 const { response } = require("express");
 
+
 const { Producto, Category } = require('../models/index.models');
 const { buscarCorreoUserModify, buscarCategoriaModificarProducto } = require("../helpers/db_validators.helpers");
+const { buildPDF } = require("../lib/pdfkit");
 
-const createProduct = async(req, res = response) =>{
+const createProduct = async (req, res = response) => {
     try {
-        const {nombre, category,...resto} = req.body
+        const { nombre, category, ...resto } = req.body
 
-        const createDate = new Date()                        
+        const createDate = new Date()
 
-        const categoryDB = await Category.findOne({ nombre:category })    
+        const categoryDB = await Category.findOne({ nombre: category })
 
         //console.log(categoryDB);
 
@@ -20,7 +22,7 @@ const createProduct = async(req, res = response) =>{
             createDate: createDate,
             modifyDate: createDate,
             category: categoryDB._id,
-            ...resto,            
+            ...resto,
         }
 
         const product = new Producto(data)
@@ -28,11 +30,11 @@ const createProduct = async(req, res = response) =>{
         await product.save()
 
         res.json({
-            ok: true,    
+            ok: true,
             body: product
         })
 
-    } catch(error) {
+    } catch (error) {
         res.json({
             ok: false,
             body: `Error al acceder a la base de datos ${error}`
@@ -40,34 +42,34 @@ const createProduct = async(req, res = response) =>{
     }
 }
 
-const getProducts = async (req, res = response) =>{
+const getProducts = async (req, res = response) => {
     try {
 
-        const query = {state: true}
+        const query = { state: true }
 
         // let { limit, from} = req.query
-    
+
         // limit = limit === '' || limit === undefined ? 5 : Number(limit);
         // from = from === '' || from === undefined ? 0 : Number(from);        
-    
+
         const [total, product] = await Promise.all([
             Producto.countDocuments(query),
             Producto.find(query)
-                                // .limit(Number(limit))
-                                // .skip(Number(from))
-                                .populate('category', 'nombre')
-                                .populate('userCreate', 'nombre')
-                                .populate('userModify', 'nombre')
+                // .limit(Number(limit))
+                // .skip(Number(from))
+                .populate('category', 'nombre')
+                .populate('userCreate', 'nombre')
+                .populate('userModify', 'nombre')
         ])
 
         res.json({
-            ok: true,                
+            ok: true,
             body: {
                 total,
                 product
             }
         })
-    } catch(error) {
+    } catch (error) {
         res.json({
             ok: false,
             body: `Error al acceder a la base de datos ${error}`
@@ -75,22 +77,22 @@ const getProducts = async (req, res = response) =>{
     }
 }
 
-const getProductById = async ( req, res = response) => {
+const getProductById = async (req, res = response) => {
     try {
-        
-        const {id} = req.params        
+
+        const { id } = req.params
 
         const resultadoBusqueda = await Producto.findById(id)
-                                                            .populate('category', 'nombre') 
-                                                            .populate('userCreate', 'nombre') 
-                                                            .populate('userModify', 'nombre')
+            .populate('category', 'nombre')
+            .populate('userCreate', 'nombre')
+            .populate('userModify', 'nombre')
 
         res.json({
             ok: true,
             body: resultadoBusqueda
         })
 
-    } catch(error) {
+    } catch (error) {
         res.json({
             ok: false,
             body: `Error al acceder a la base de datos ${error}`
@@ -98,37 +100,37 @@ const getProductById = async ( req, res = response) => {
     }
 }
 
-const updateProduct = async ( req, res = response) => {
+const updateProduct = async (req, res = response) => {
     try {
-        
-        const {correo} = req.usuario
-        const usuario =  await buscarCorreoUserModify(correo)
 
-        const {id} = req.params
+        const { correo } = req.usuario
+        const usuario = await buscarCorreoUserModify(correo)
 
-        let { category, ...resto} = req.body
+        const { id } = req.params
 
-        const categoria = await buscarCategoriaModificarProducto((category))        
+        let { category, ...resto } = req.body
 
-        const modifyDate = new Date()             
-        
-        
+        const categoria = await buscarCategoriaModificarProducto((category))
 
-        resto.modifyDate = modifyDate    
+        const modifyDate = new Date()
+
+
+
+        resto.modifyDate = modifyDate
         resto.category = categoria
         resto.userModify = usuario
 
-        const producto = await Producto.findByIdAndUpdate(id, resto, {new : true}) //** Con el new : true trae el nuevo valor */
-                                                .populate('category', 'nombre') 
-                                                .populate('userCreate', 'nombre') 
-                                                .populate('userModify', 'nombre correo')
-                                                
+        const producto = await Producto.findByIdAndUpdate(id, resto, { new: true }) //** Con el new : true trae el nuevo valor */
+            .populate('category', 'nombre')
+            .populate('userCreate', 'nombre')
+            .populate('userModify', 'nombre correo')
+
         res.json({
             ok: true,
             body: producto
         })
 
-    } catch(error) {
+    } catch (error) {
         res.json({
             ok: false,
             body: `Error al acceder a la base de datos ${error}`
@@ -136,24 +138,25 @@ const updateProduct = async ( req, res = response) => {
     }
 }
 
-const updateProductList = async ( req, res = response) => {
-    
+const updateProductList = async (req, res = response) => {
+
     try {
-        
-        const {order} = req.body
+
+        const { order } = req.body
 
         let newProduct
 
 
         for (const product of order) {
-            let {id, cantidad, ...resto} = product
+            let { id, cantidad, ...resto } = product
 
             let nuevaCantidad = cantidad - 1;
+            console.log(nuevaCantidad);
 
             // Actualizar la cantidad en el objeto product
             product.cantidad = nuevaCantidad;
 
-            newProduct = await Producto.findByIdAndUpdate(id, product, {new : true}) 
+            newProduct = await Producto.findByIdAndUpdate(id, product, { new: true })
 
         }
 
@@ -161,7 +164,7 @@ const updateProductList = async ( req, res = response) => {
             ok: true,
             body: 'Compra realizada'
         })
-    
+
 
     } catch (error) {
         res.json({
@@ -173,25 +176,25 @@ const updateProductList = async ( req, res = response) => {
 
 }
 
-const deleteProduct = async ( req, res = response) => {
-    try {        
+const deleteProduct = async (req, res = response) => {
+    try {
 
         // const {correo} = req.usuario
         // const usuario =  await buscarCorreoUserModify(correo)
 
         const { id } = req.params
 
-        let datos = { state: false}
+        let datos = { state: false }
 
         const modifyDate = new Date()
 
         // datos.userModify = usuario
         // datos.modifyDate = modifyDate
 
-        const product = await Producto.findByIdAndUpdate(id, datos, {new : true})
-                                                        .populate('category', 'nombre') 
-                                                        // .populate('userCreate', 'nombre') 
-                                                        // .populate('userModify', 'nombre')
+        const product = await Producto.findByIdAndUpdate(id, datos, { new: true })
+            .populate('category', 'nombre')
+        // .populate('userCreate', 'nombre') 
+        // .populate('userModify', 'nombre')
 
 
 
@@ -200,7 +203,34 @@ const deleteProduct = async ( req, res = response) => {
             body: product
         })
 
-    } catch(error) {
+    } catch (error) {
+        res.json({
+            ok: false,
+            body: `Error al acceder a la base de datos ${error}`
+        })
+    }
+}
+
+const generatePDF = async (req, res = response) => {
+    try {
+
+        const stream = res.writeHead(200, {
+            "Content-Type": "application/pdf",
+            "Content-Disposition": "attachment; filename=carta_aceptacion.pdf",
+        });
+
+        const usuario = {
+            usuario: 'Ezequiel',
+            encargado: 'Raul'
+        }
+
+        buildPDF(
+            (data) => stream.write(data),
+            () => stream.end(),
+            usuario
+        );
+
+    } catch (error) {
         res.json({
             ok: false,
             body: `Error al acceder a la base de datos ${error}`
@@ -214,5 +244,6 @@ module.exports = {
     getProductById,
     updateProduct,
     updateProductList,
-    deleteProduct
+    deleteProduct,
+    generatePDF
 }

@@ -33,6 +33,8 @@ router.post('/', [
     validarCampos
 ],  createCategory)
 
+
+
 // Actualizar una categoria - privado - cualquier persona con un token valido
 router.put('/:id', [
     validarJWT,
