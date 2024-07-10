@@ -2,7 +2,6 @@ const { response } = require("express")
 
 const validarArchivoSubir = (req, res = response, next) => {
 
-    console.log(req.files.archivo);
     
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
         return res.status(400).json({
@@ -12,7 +11,6 @@ const validarArchivoSubir = (req, res = response, next) => {
                 
     }
 
-    console.log('paso');
 
     next()
 }
