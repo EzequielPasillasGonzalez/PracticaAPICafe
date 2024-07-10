@@ -12,6 +12,8 @@ const validarArchivoSubir = (req, res = response, next) => {
                 
     }
 
+    console.log('paso');
+
     next()
 }
 
